@@ -12,6 +12,10 @@ def home(request):
     product=Products.objects.filter(trending=1) #Condition for checking the trending the latest product
     return render(request,"shop/index.html",{"product":product})#It will shows an trending products below the home pages! 
 
+def thank_page(request):
+    return render(request,"shop/thank.html") 
+
+
 def fav_page(request):
     if request.headers.get("x-requested-with")=='XMLHttpRequest':
         if request.user.is_authenticated:

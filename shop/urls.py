@@ -5,6 +5,7 @@ urlpatterns = [
     path('reg/',views.regis,name="reg"),
     path('login/',views.login_page,name="login"),
     path('logout/',views.logout_page,name="logout"),
+    path('thanks/',views.thank_page,name="thanks"),
     path('cart/',views.cart_page,name="cart"),
     path('fav_viewpage/',views.fav_viewpage,name="fav_viewpage"),
     path('remove_cart/<str:cid>',views.remove_cart,name="remove_cart"),
