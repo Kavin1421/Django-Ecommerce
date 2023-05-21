@@ -1,4 +1,4 @@
-
+"""
 Guide to follow steps:
 ==========================================================================================================
 1.To check the python version(python --v)
@@ -134,5 +134,5 @@ admin.site.register(Products)#it will returns asusuall like before
         ==> STATICFILES_DIRS=[
           BASE_DIR/'static'
             ]                       then only we will add an images to the our html pages
-
+"""
 
