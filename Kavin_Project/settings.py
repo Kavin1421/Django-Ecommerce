@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'djangokavin',
         'HOST': 'localhost',
         'USER': 'admin',
-        'PASSWORD': '1421@Kavin',
+        'PASSWORD': '1421Kavin',
         'PORT': '3306',
     }
 }
