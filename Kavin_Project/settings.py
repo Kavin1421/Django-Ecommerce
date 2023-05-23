@@ -80,7 +80,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangokavin',
-        'HOST': 'localhost',
+        'HOST': 'awsdb.cihel1vtyfri.us-east-1.rds.amazonaws.com',
         'USER': 'admin',
         'PASSWORD': '1421Kavin',
         'PORT': '3306',
