@@ -1,7 +1,6 @@
 # Django-Ecommerce
 Creating an E-Commerce with the tools of Python and Django with My-sql
 
-
 ## Run these Commads
 ### Step 1
      pip install -r requirements.txt
