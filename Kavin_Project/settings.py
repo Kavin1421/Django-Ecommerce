@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1jl(#0s@4^7u^*r)du^@d0%@9*&@axfhwtb3q#=2bwqoah4y7v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -80,9 +80,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangokavin',
-        'HOST': 'awsdb.cihel1vtyfri.us-east-1.rds.amazonaws.com',
-        'USER': 'admin',
-        'PASSWORD': '1421Kavin',
+        'HOST': '127.0.0.1',
+        'USER': 'root',
+        'PASSWORD': '1421@Kavin',
         'PORT': '3306',
     }
 }
@@ -122,12 +122,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
-MEDIA_ROOT=BASE_DIR/'static'
+# MEDIA_ROOT=BASE_DIR/'static'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
