@@ -1,0 +1,59 @@
+{% extends 'shop/layout/main.html' %}
+
+{% block title %}
+Order Details
+{% endblock title %}
+
+{% block content %}
+<section class="bg-light py-4 my-9">
+  <div class="container">
+    <h4 class="mb-3">Order Details</h4>
+    <hr style="border-color: #044c6b;">
+
+    <table class="table table-bordered">
+      <tr>
+        <th>Order ID</th>
+        <td>{{ order.id }}</td>
+      </tr>
+      <tr>
+        <th>Product</th>
+        <td>{{ order.product.fname }}</td>
+      </tr>
+      <tr>
+        <th>Image</th>
+        <td><img src="{{ order.product.product_image.url }}" height="100px"></td>
+      </tr>
+      <tr>
+        <th>Quantity</th>
+        <td>{{ order.quantity }}</td>
+      </tr>
+      <tr>
+        <th>Total Price</th>
+        <td>Rs. {{ order.total_price }}</td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td>
+          {% if request.user.is_superuser %}
+            <form method="POST" action="{% url 'update_order_status' order.id %}">
+                {% csrf_token %}
+                <select name="status" id="status" class="form-control">
+                    {% for status, label in order.STATUS_CHOICES %}
+                        <option value="{{ status }}" {% if order.status == status %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary mt-2">Update</button>
+            </form>
+          {% else %}
+            <p><strong>Status:</strong> {{ order.status }}</p>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+
+    <a href="{% url 'vieworders' %}" class="btn btn-primary">Back to Orders</a>
+  </div>
+</section>
+{% endblock content %}

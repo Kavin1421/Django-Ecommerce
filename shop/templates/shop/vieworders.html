@@ -1,0 +1,45 @@
+{% extends 'shop/layout/main.html' %}
+
+{% block title %}
+K-cart || Orders
+{% endblock title %}
+
+{% block content %}
+<section class="bg-light py-4 my-9">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h4 class="mb-3">Your Orders</h4>
+        <hr style="border-color: #044c6b;">
+        {% include 'shop/inc/message.html' %}
+      </div>
+      <table class="table table-bordered">
+        <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Image</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.product.fname }}</td>
+                <td><img src="{{ order.product.product_image.url }}" height="75px" alt="{{ order.product.fname }}"></td>
+                <td>{{ order.quantity }}</td>
+                <td>Rs. {{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td><a href="{% url 'order_details' order.id %}" class="btn btn-info btn-sm">View</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No orders found.</td>
+            </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock content %}

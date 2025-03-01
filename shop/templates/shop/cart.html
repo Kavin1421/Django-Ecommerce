@@ -40,7 +40,15 @@ K-cart || Cart
                 <td></td>
                 <td colspan="2"><b>Total Amount :</b></td>
                 <td id="net">0 </td>
-                <td ><button class="btn btn-warning btn-sm"><i class="fa fa-rocket"></i><a href="{% url 'thanks'%}"> Checkout</a></button></td>
+                <td>
+                  <form method="POST" action="{% url 'checkout' %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-warning btn-sm">
+                          <i class="fa fa-rocket"></i> Checkout
+                      </button>
+                  </form>
+              </td>              
+                <!-- <td ><button class="btn btn-warning btn-sm"><i class="fa fa-rocket"></i><a href="{% url 'thanks'%}"> Checkout</a></button></td> -->
             </tr>
       </table>
     </div>

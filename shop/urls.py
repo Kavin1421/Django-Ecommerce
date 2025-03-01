@@ -1,5 +1,6 @@
 from django.urls import path
 from .import views
+from .views import update_order_status
 urlpatterns = [
     path('',views.home ,name="home"),
     path('reg/',views.regis,name="reg"),
@@ -7,6 +8,10 @@ urlpatterns = [
     path('logout/',views.logout_page,name="logout"),
     path('thanks/',views.thank_page,name="thanks"),
     path('cart/',views.cart_page,name="cart"),
+    path('vieworders/',views.vieworders_page,name="vieworders"),
+    path("checkout/", views.checkout, name="checkout"),
+    path("order/<int:order_id>/", views.order_details, name="order_details"),
+    path('update-order-status/<int:order_id>/', update_order_status, name='update_order_status'),
     path('fav_viewpage/',views.fav_viewpage,name="fav_viewpage"),
     path('remove_cart/<str:cid>',views.remove_cart,name="remove_cart"),
     path('remove_fav/<str:fid>',views.remove_fav,name="remove_fav"),
