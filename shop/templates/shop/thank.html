@@ -16,6 +16,14 @@ K-cart || Thanks
         <button class="go-home"><a href="{% url 'home'%}">
         go home
         </button></a>
+        <td>
+          <form method="POST" action="{% url 'checkout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-warning btn-sm">
+                  <i class="fa fa-rocket"></i> View Orders
+              </button>
+          </form>
+      </td> 
       </div>
       <div class="footer-like">
         <p>Email not received?

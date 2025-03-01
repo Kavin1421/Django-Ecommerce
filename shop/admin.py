@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import * #it will import all the classes from models.py
-from .models import Order
+# from .models import Order
 
 # class Categoryadmin(admin.ModelAdmin):
 #     list_display = ('fname','image','desc')
