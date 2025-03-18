@@ -17,7 +17,7 @@ K-cart || Thanks
         go home
         </button></a>
         <td>
-          <form method="POST" action="{% url 'checkout' %}">
+          <form method="POST" action="{% url 'vieworders' %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-warning btn-sm">
                   <i class="fa fa-rocket"></i> View Orders

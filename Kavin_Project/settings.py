@@ -137,4 +137,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
+
+RAZORPAY_KEY_ID = "rzp_test_9XR1GfIrsrtglI"
+RAZORPAY_KEY_SECRET = "OFORo6jYbrfa94L1Q2rWT95X"
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

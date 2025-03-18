@@ -2,72 +2,63 @@
 {% block title %}Payment{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Select Payment Method</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form method="post" action="{% url 'process_payment' %}" class="shadow p-4 bg-white rounded">
-                {% csrf_token %}
-                
-                <!-- Payment Method Selection -->
-                <div class="mb-3">
-                    <label class="form-label"><b>Choose Payment Option:</b></label>
-                    <select id="paymentMethod" name="payment_method" class="form-control" required>
-                        <option value="" disabled selected>Select Payment Method</option>
-                        <option value="card">Credit/Debit Card</option>
-                        <option value="upi">UPI</option>
-                        <option value="qr">QR Code Scanner</option>
-                        <option value="cod">Cash on Delivery</option>
-                    </select>
-                </div>
+<div class="container text-center mt-5">
+    <h2>Choose Payment Method</h2>
+    <p>Total Amount: ₹ <span id="totalAmount">{{ total_amount }}</span></p>
 
-                <!-- Card Payment Details -->
-                <div id="cardPayment" class="payment-section d-none">
-                    <h5>Enter Card Details</h5>
-                    <input type="text" name="card_number" class="form-control mb-2" placeholder="Card Number">
-                    <input type="text" name="card_holder" class="form-control mb-2" placeholder="Card Holder Name">
-                    <input type="text" name="expiry_date" class="form-control mb-2" placeholder="Expiry Date (MM/YY)">
-                    <input type="text" name="cvv" class="form-control mb-2" placeholder="CVV">
-                </div>
-
-                <!-- UPI Payment -->
-                <div id="upiPayment" class="payment-section d-none">
-                    <h5>Enter UPI ID</h5>
-                    <input type="text" name="upi_id" class="form-control mb-2" placeholder="UPI ID (e.g., yourname@upi)">
-                </div>
-
-                <!-- QR Code Scanner -->
-                <div id="qrPayment" class="payment-section d-none text-center">
-                    <h5>Scan to Pay</h5>
-                    <img src="/static/images/qr-code.png" alt="QR Code" width="200">
-                    <p>Scan the QR code using your payment app.</p>
-                </div>
-
-                <!-- Cash on Delivery -->
-                <div id="codPayment" class="payment-section d-none">
-                    <h5>Cash on Delivery Selected</h5>
-                    <p>You can pay cash when your order is delivered.</p>
-                </div>
-
-                <button type="submit" class="btn btn-success w-100 mt-3">Proceed with Payment</button>
-            </form>
-        </div>
-    </div>
+    <button id="rzp-button" class="btn btn-success">Pay Online</button>
+    <button id="cod-button" class="btn btn-warning">Cash on Delivery</button>
 </div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    document.getElementById("paymentMethod").addEventListener("change", function () {
-        let selectedPayment = this.value;
-        document.querySelectorAll(".payment-section").forEach(el => el.classList.add("d-none"));
+    document.getElementById("rzp-button").addEventListener("click", function() {
+        let amount = document.getElementById("totalAmount").textContent;
         
-        if (selectedPayment === "card") {
-            document.getElementById("cardPayment").classList.remove("d-none");
-        } else if (selectedPayment === "upi") {
-            document.getElementById("upiPayment").classList.remove("d-none");
-        } else if (selectedPayment === "qr") {
-            document.getElementById("qrPayment").classList.remove("d-none");
-        } else if (selectedPayment === "cod") {
-            document.getElementById("codPayment").classList.remove("d-none");
+        fetch("{% url 'create_order' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: "amount=" + amount
+        })
+        .then(response => response.json())
+        .then(data => {
+            var options = {
+                "key": "{{ RAZORPAY_KEY_ID }}",
+                "amount": data.amount,
+                "currency": "INR",
+                "name": "K-Cart",
+                "description": "Order Payment",
+                "order_id": data.id,
+                "handler": function (response){
+                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                    window.location.href = "/order-success/";
+                },
+                "theme": {"color": "#3399cc"}
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        });
+    });
+
+    document.getElementById("cod-button").addEventListener("click", function() {
+        if (confirm("Are you sure you want to place the order as Cash on Delivery?")) {
+            fetch("{% url 'cod_order' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert("Order placed successfully! Your order will be delivered soon.");
+                    window.location.href = "/thanks/";
+                }
+            });
         }
     });
 </script>

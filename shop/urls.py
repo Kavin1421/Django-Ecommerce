@@ -1,8 +1,7 @@
 from django.urls import path
 from .import views
-from .views import update_order_status
-from .views import address_page
-from .views import payment_page, process_payment
+from .views import *
+
 urlpatterns = [
     path('',views.home ,name="home"),
     path('reg/',views.regis,name="reg"),
@@ -25,4 +24,6 @@ urlpatterns = [
     path('address/', address_page, name='address_page'),
     path("payment/", payment_page, name="payment_page"),
     path("process_payment/", process_payment, name="process_payment"),
+    path("create_order/", create_order, name="create_order"),
+     path("cod_order/", cod_order, name="cod_order"),
 ]

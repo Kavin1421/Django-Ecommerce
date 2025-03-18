@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render,get_object_or_404
 from . models import *
+import razorpay
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
 from shop.form import CustomUserForm
@@ -240,7 +242,9 @@ def address_page(request):
     return render(request, "shop/address.html", {"form": form})
 
 def payment_page(request):
-    return render(request, "shop/payment.html")
+    cart_items = Cart.objects.filter(user=request.user)
+    total_amount = sum(item.product.selling_price * item.product_qty for item in cart_items)
+    return render(request, "shop/payment.html", {"total_amount": total_amount})
 
 def process_payment(request):
     if request.method == "POST":
@@ -260,3 +264,33 @@ def process_payment(request):
 
     return redirect("payment_page")
 
+def create_order(request):
+    if request.method == "POST":
+        amount = int(float(request.POST.get("amount")) * 100)  # Convert to paise
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        order = client.order.create({"amount": amount, "currency": "INR", "payment_capture": "1"})
+        return JsonResponse(order)
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+def cod_order(request):
+    if request.method == "POST":
+        cart_items = Cart.objects.filter(user=request.user)
+
+        if not cart_items.exists():
+            return JsonResponse({"status": "error", "message": "Cart is empty"}, status=400)
+
+        for item in cart_items:
+            Order.objects.create(
+                user=request.user,
+                product=item.product,  # Corrected field
+                quantity=item.product_qty,  # Corrected field
+                total_price=item.product.selling_price * item.product_qty,  # Corrected field
+                status="Pending",  # Default order status
+            )
+
+        # Clear the cart after placing the order
+        cart_items.delete()
+
+        return JsonResponse({"status": "success"})
+    
+    return JsonResponse({"status": "error"}, status=400)
