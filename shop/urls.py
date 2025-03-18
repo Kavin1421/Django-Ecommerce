@@ -1,6 +1,8 @@
 from django.urls import path
 from .import views
 from .views import update_order_status
+from .views import address_page
+from .views import payment_page, process_payment
 urlpatterns = [
     path('',views.home ,name="home"),
     path('reg/',views.regis,name="reg"),
@@ -20,4 +22,7 @@ urlpatterns = [
     path('collection/<str:cname>/<str:pname>',views.product_details,name="product_details"),
     path('addtocart',views.add_to_cart,name="addtocart"),#Don't give the backslash because post method cannot take the slash
     path('fav',views.fav_page,name="fav"),
+    path('address/', address_page, name='address_page'),
+    path("payment/", payment_page, name="payment_page"),
+    path("process_payment/", process_payment, name="process_payment"),
 ]

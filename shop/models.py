@@ -74,3 +74,17 @@ class Order(models.Model):
     
     def __str__(self):
         return f"Order {self.id} - {self.product.fname} by {self.user.username}"
+    
+
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15)
+    email = models.EmailField()
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.full_name

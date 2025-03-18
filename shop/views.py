@@ -3,6 +3,7 @@ from . models import *
 from django.contrib import messages
 from django.http import HttpResponse
 from shop.form import CustomUserForm
+from .form import AddressForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 import json
@@ -224,3 +225,38 @@ def product_details(request,cname,pname):#Ar first it will be get an three param
     else:
         messages.warning("No Such Category found !!!") # It will be redirected to the main same page because of not building the path of that exact product
         return redirect('collection')
+    
+
+def address_page(request):
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+            return redirect('payment_page')  # Redirect to payment
+    else:
+        form = AddressForm()
+    return render(request, "shop/address.html", {"form": form})
+
+def payment_page(request):
+    return render(request, "shop/payment.html")
+
+def process_payment(request):
+    if request.method == "POST":
+        payment_method = request.POST.get("payment_method")
+        
+        # Simulate different payment process responses
+        if payment_method == "card":
+            return JsonResponse({"status": "success", "message": "Card payment processed successfully!"})
+        elif payment_method == "upi":
+            return JsonResponse({"status": "success", "message": "UPI payment successful!"})
+        elif payment_method == "qr":
+            return JsonResponse({"status": "success", "message": "QR code scanned successfully!"})
+        elif payment_method == "cod":
+            return JsonResponse({"status": "success", "message": "Cash on Delivery selected. Pay at doorstep!"})
+        
+        return JsonResponse({"status": "error", "message": "Invalid payment method selected."})
+
+    return redirect("payment_page")
+

@@ -1,0 +1,17 @@
+{% extends 'shop/layout/main.html' %}
+{% block title %}Enter Address{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Enter Your Shipping Address</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" class="shadow p-4 bg-white rounded">
+                {% csrf_token %}
+                {{ form.as_p }}  <!-- Django will now use Bootstrap-styled form fields -->
+                <a href="{% url 'payment_page' %}" class="btn btn-success w-100">Proceed to Payment</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

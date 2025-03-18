@@ -1,0 +1,75 @@
+{% extends 'shop/layout/main.html' %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Select Payment Method</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="{% url 'process_payment' %}" class="shadow p-4 bg-white rounded">
+                {% csrf_token %}
+                
+                <!-- Payment Method Selection -->
+                <div class="mb-3">
+                    <label class="form-label"><b>Choose Payment Option:</b></label>
+                    <select id="paymentMethod" name="payment_method" class="form-control" required>
+                        <option value="" disabled selected>Select Payment Method</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="upi">UPI</option>
+                        <option value="qr">QR Code Scanner</option>
+                        <option value="cod">Cash on Delivery</option>
+                    </select>
+                </div>
+
+                <!-- Card Payment Details -->
+                <div id="cardPayment" class="payment-section d-none">
+                    <h5>Enter Card Details</h5>
+                    <input type="text" name="card_number" class="form-control mb-2" placeholder="Card Number">
+                    <input type="text" name="card_holder" class="form-control mb-2" placeholder="Card Holder Name">
+                    <input type="text" name="expiry_date" class="form-control mb-2" placeholder="Expiry Date (MM/YY)">
+                    <input type="text" name="cvv" class="form-control mb-2" placeholder="CVV">
+                </div>
+
+                <!-- UPI Payment -->
+                <div id="upiPayment" class="payment-section d-none">
+                    <h5>Enter UPI ID</h5>
+                    <input type="text" name="upi_id" class="form-control mb-2" placeholder="UPI ID (e.g., yourname@upi)">
+                </div>
+
+                <!-- QR Code Scanner -->
+                <div id="qrPayment" class="payment-section d-none text-center">
+                    <h5>Scan to Pay</h5>
+                    <img src="/static/images/qr-code.png" alt="QR Code" width="200">
+                    <p>Scan the QR code using your payment app.</p>
+                </div>
+
+                <!-- Cash on Delivery -->
+                <div id="codPayment" class="payment-section d-none">
+                    <h5>Cash on Delivery Selected</h5>
+                    <p>You can pay cash when your order is delivered.</p>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 mt-3">Proceed with Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("paymentMethod").addEventListener("change", function () {
+        let selectedPayment = this.value;
+        document.querySelectorAll(".payment-section").forEach(el => el.classList.add("d-none"));
+        
+        if (selectedPayment === "card") {
+            document.getElementById("cardPayment").classList.remove("d-none");
+        } else if (selectedPayment === "upi") {
+            document.getElementById("upiPayment").classList.remove("d-none");
+        } else if (selectedPayment === "qr") {
+            document.getElementById("qrPayment").classList.remove("d-none");
+        } else if (selectedPayment === "cod") {
+            document.getElementById("codPayment").classList.remove("d-none");
+        }
+    });
+</script>
+
+{% endblock %}
